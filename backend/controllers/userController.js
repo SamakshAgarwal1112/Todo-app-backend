@@ -8,36 +8,30 @@ const User = require('../models/userModel');
 // @access  Public
 const registerUser = asyncHandler(async(req, res) => {
     const {name, email, password} = req.body;
-
     if(!name || !email || !password){
         res.status(400);
         throw new Error("please add all the fields!");
     }
-
     // check if user exists
-    const userExists = await User.findOne({email});
-    if(userExists){
+    const user = await User.findOne({email});
+    if(user){
         res.status(400);
         throw new Error('user already exists!');
     }
-
     // hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // create user
-    const user = await User.create({
+    const newUser = await User.create({
         name,
         email,
         password: hashedPassword,
     })
-
-    if(user){
+    if(newUser){
         res.status(201).json({
             _id: user.id,
-            name: user.name,
+            name:user.name,
             email: user.email,
-            token: generateToken(user.id)
+            token: generateToken(user.id, user.email)
         })
     } else {
         res.status(400);
@@ -50,16 +44,14 @@ const registerUser = asyncHandler(async(req, res) => {
 // @access  Public
 const loginUser = asyncHandler(async(req, res) => {
     const {email, password} = req.body;
-
     // check for user email
     const user = await User.findOne({email});
-
     if(user && (await bcrypt.compare(password, user.password))){
         res.json({
             _id: user.id,
             name: user.name,
             email: user.email,
-            token: generateToken(user.id)
+            token: generateToken(user.id, user.email)
         })
     } else {
         res.status(400);
@@ -80,8 +72,8 @@ const getMe = asyncHandler(async(req, res) => {
 })
 
 // Generate JWT
-const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET,{
+const generateToken = (id, email) => {
+    return jwt.sign({id, email}, process.env.JWT_SECRET,{
         expiresIn: '30d',
     } )
 }
