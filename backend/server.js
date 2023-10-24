@@ -17,7 +17,7 @@ const corsOptions = {
     optionsSuccessStatus: 200,
     credentials: true,
 };
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
     res.status(200).send({message: "welcome to the todo - app - api!"});
