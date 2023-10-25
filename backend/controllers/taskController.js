@@ -39,7 +39,7 @@ const addTask = asyncHandler(async(req, res) => {
         user: req.user.id,
         completed: false,
     })
-    res.json(task);
+    res.send(task);
 })
 
 // @route  PUT /api/tasks/:id
