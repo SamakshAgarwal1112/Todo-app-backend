@@ -46,7 +46,6 @@ const addTask = asyncHandler(async(req, res) => {
 // @desc   Change user task status
 // @access Private
 const updateTaskStatus = asyncHandler(async(req, res) => {
-    console.log("updateTaskStatus ran in backend!");
     const task = await Task.findById(req.params.id);
     if(!task){
         res.status(400);
