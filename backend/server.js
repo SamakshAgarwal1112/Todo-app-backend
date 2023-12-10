@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 const corsOptions = {
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://todo-app-nbds.vercel.app", "https://todo-app-nbds-cef74yem7-jainvedant392.vercel.app/"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://todo-app-nbds.vercel.app", "https://todo-app-nbds-cef74yem7-jainvedant392.vercel.app"],
     methods: 'GET,POST,PUT,DELETE',
     optionsSuccessStatus: 200,
     credentials: true,
