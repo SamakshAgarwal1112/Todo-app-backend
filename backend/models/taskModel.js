@@ -1,13 +1,21 @@
 const mongoose = require('mongoose');
 const taskSchema = mongoose.Schema({
-    todo:{
+    title:{
         type: String,
         required: [true, 'Please enter a task.']
+    },
+    description:{
+        type: String,
+        default: 'No description provided.'
     },
     completed:{
         type: Boolean,
         default: false,
         required: true
+    },
+    dueDate: {
+        type: Date,
+        required: true,
     },
     user:{
         type: mongoose.Schema.Types.ObjectId,

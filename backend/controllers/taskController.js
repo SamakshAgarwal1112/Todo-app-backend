@@ -30,17 +30,50 @@ const getIncompletedTasks = asyncHandler(async (req, res) => {
 // @desc   Add user task
 // @access Private
 const addTask = asyncHandler(async (req, res) => {
-  if (!req.body.todo) {
+  if (!req.body.title) {
     res.status(400);
     throw new Error("please add a task!");
   }
   const task = await Task.create({
-    todo: req.body.todo,
+    title: req.body.title,
+    description: req.body.description,
+    dueDate: req.body.dueDate,
     user: req.user.id,
     completed: false,
   });
   res.json(task);
 });
+
+// @route  PUT /api/tasks/updatecontent/:id
+// @desc   Change user task content
+// @access Private
+const updateTaskContent = asyncHandler(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  if(!task) {
+    res.status(400);
+    throw new Error("Task not found!");
+  }
+  // checking for user
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found!");
+  }
+  // makes sure the logged in user matches the user of the task
+  if (task.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not authorized!");
+  }
+  task.title = req.body.title;
+  task.description = req.body.description;
+  await task.save();
+  res.status(200).json({
+    success: true,
+    message: "Task content changed successfully!",
+    title: task.title,
+    description: task.description,
+  });
+})
 
 // @route  PUT /api/tasks/:id
 // @desc   Change user task status
@@ -102,6 +135,7 @@ module.exports = {
   getCompletedTasks,
   getIncompletedTasks,
   addTask,
+  updateTaskContent,
   updateTaskStatus,
   deleteTask,
 };
