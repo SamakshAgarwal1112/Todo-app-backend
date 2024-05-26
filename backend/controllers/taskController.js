@@ -10,6 +10,19 @@ const getTasks = asyncHandler(async (req, res) => {
   res.json(tasks);
 });
 
+// @route  GET /api/tasks/:id
+// @desc   Get a task of _id=id of the user
+// @access Private
+const getTask = asyncHandler(async (req, res) => {
+  const tasks = await Task.find({ user: req.user.id });
+  const task = tasks.find((task) => task._id.toString() === req.params.id);
+  if (!task) {
+    res.status(400);
+    throw new Error("Task not found!");
+  }
+  res.json(task);
+})
+
 // @route  GET /api/tasks/completed
 // @desc   Get completed tasks of the user
 // @access Private
@@ -132,6 +145,7 @@ const deleteTask = asyncHandler(async (req, res) => {
 
 module.exports = {
   getTasks,
+  getTask,
   getCompletedTasks,
   getIncompletedTasks,
   addTask,
