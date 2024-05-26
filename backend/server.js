@@ -15,9 +15,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://todo-app-nbds.vercel.app",
-    "https://todo-app-nbds-cef74yem7-jainvedant392.vercel.app",
-    "https://todo-app-nbds-rqnm-7x23rdogj-jainvedant392s-projects.vercel.app",
+    "https://todo-app-nbds-rqnm-lsobmc2bp-jainvedant392s-projects.vercel.app/",
   ],
   methods: "GET,POST,PUT,DELETE",
   optionsSuccessStatus: 200,
