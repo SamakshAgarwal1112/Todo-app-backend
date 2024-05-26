@@ -64,8 +64,8 @@ const updateTaskContent = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not authorized!");
   }
-  task.title = req.body.title;
-  task.description = req.body.description;
+  task.title = req.body.title ? req.body.title : task.title;
+  task.description = req.body.description ? req.body.description : task.description;
   await task.save();
   res.status(200).json({
     success: true,
